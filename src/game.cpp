@@ -2,22 +2,22 @@
 #include <iostream>
 Game::Game()
 {
-    music = LoadMusicStream("sounds/music.ogg") ;
-    PlayMusicStream(music) ;
+    music = LoadMusicStream("sounds/music.ogg");
+    PlayMusicStream(music);
     explosion_sound = LoadSound("sounds/explosion.ogg");
 
-    InitGame() ;
+    InitGame();
 }
 Game::~Game()
 {
     Alien::UnloadImages();
-    UnloadMusicStream(music) ;
-    UnloadSound(explosion_sound) ;
+    UnloadMusicStream(music);
+    UnloadSound(explosion_sound);
 }
 
 void Game::Draw()
 {
-    // if(!run) return ; 
+    // if(!run) return ;
     spaceship.Draw();
     for (Laser &laser : spaceship.laser)
     {
@@ -41,65 +41,65 @@ void Game::Draw()
 void Game::Reset()
 {
     spaceship.Reset();
-    aliens.clear() ;
-    aliens_laser.clear() ;
-    obstacles.clear() ;
+    aliens.clear();
+    aliens_laser.clear();
+    obstacles.clear();
 }
 void Game::InitGame()
 {
-    score =0 ; 
-    high_score = LoadHighScoreFromFile() ;
-obstacles = CreateObstacles();
+    score = 0;
+    high_score = LoadHighScoreFromFile();
+    obstacles = CreateObstacles();
     aliens = CreateAliens();
     aliens_direction = 1;
     time_last_alien_fired = 0.0;
     time_last_spawn = 0.0;
     mystery_ship_spawn_interval = GetRandomValue(10, 20);
-    lives = 3 ; 
-    run = true ;
+    lives = 3;
+    run = true;
 }
 void Game::CheckForHighScore()
 {
-    high_score = (high_score > score) ? high_score : score ;
-    SaveHighScoreToFile(high_score) ;
+    high_score = (high_score > score) ? high_score : score;
+    SaveHighScoreToFile(high_score);
 }
 void Game::SaveHighScoreToFile(int high_score)
 {
-    std::ofstream high_score_file("highScore.txt") ;
-    if(high_score_file.is_open())
+    std::ofstream high_score_file("highScore.txt");
+    if (high_score_file.is_open())
     {
-        high_score_file<<high_score ;
-        high_score_file.close() ;
+        high_score_file << high_score;
+        high_score_file.close();
     }
-    else std::cerr<<"Failed to save high score " <<std::endl ;
-
-
+    else
+        std::cerr << "Failed to save high score " << std::endl;
 }
 
 int Game::LoadHighScoreFromFile()
 {
-    int high_score=0 ; 
-    std::ifstream high_score_file("highScore.txt") ;
-    if(high_score_file.is_open())
+    int high_score = 0;
+    std::ifstream high_score_file("highScore.txt");
+    if (high_score_file.is_open())
     {
-        high_score_file>>high_score ;
-        high_score_file.close() ;
+        high_score_file >> high_score;
+        high_score_file.close();
     }
-    else std::cerr<<"Failed to load form file"<<std::endl ;
-    return high_score ;
+    else
+        std::cerr << "Failed to load form file" << std::endl;
+    return high_score;
 }
 
 void Game::Update()
 {
-    if(!run) 
+    if (!run)
     {
-        if(IsKeyDown(KEY_ENTER))
+        if (IsKeyDown(KEY_ENTER))
         {
-            Reset() ;
-            InitGame() ;
+            Reset();
+            InitGame();
         }
-        return ;
-    } 
+        return;
+    }
     double current_time = GetTime();
     if (current_time - time_last_spawn >= mystery_ship_spawn_interval)
     {
@@ -124,7 +124,8 @@ void Game::Update()
 
 void Game::HandleInput()
 {
-    if(!run) return ;
+    if (!run)
+        return;
     if (IsKeyDown(KEY_LEFT))
     {
         spaceship.MoveLeft();
@@ -177,7 +178,7 @@ void Game::MoveAliens()
 {
     for (Alien &al : aliens)
     {
-        if (al.position.x + al.alien_images[al.type - 1].width > GetScreenWidth()-25)
+        if (al.position.x + al.alien_images[al.type - 1].width > GetScreenWidth() - 25)
         {
             aliens_direction = -1;
             MoveDownAliens(2);
@@ -216,7 +217,7 @@ void Game::AlienShootLaser()
 
 void Game::GameOver()
 {
-    run = false ; 
+    run = false;
 }
 
 void Game::CheckForCollision()
@@ -228,17 +229,19 @@ void Game::CheckForCollision()
         {
             if (CheckCollisionRecs(laser.GetRec(), it->GetRec()))
             {
-                PlaySound(explosion_sound) ;
-                if(it->type == 1) score+=100 ;
-                else if(it->type ==2) score+=200 ;
-                else score+=300 ;
+                PlaySound(explosion_sound);
+                if (it->type == 1)
+                    score += 100;
+                else if (it->type == 2)
+                    score += 200;
+                else
+                    score += 300;
                 it = aliens.erase(it);
                 laser.active = false;
-                CheckForHighScore() ;
+                CheckForHighScore();
             }
             else
                 it++;
-            
         }
         for (Obstacle &obstacle : obstacles)
         {
@@ -256,8 +259,8 @@ void Game::CheckForCollision()
         }
         if (CheckCollisionRecs(mystery_ship.GetRec(), laser.GetRec()))
         {
-            score+=500 ;
-            PlaySound(explosion_sound) ;
+            score += 500;
+            PlaySound(explosion_sound);
             mystery_ship.alive = false;
             laser.active = false;
         }
@@ -267,10 +270,10 @@ void Game::CheckForCollision()
         if (CheckCollisionRecs(laser.GetRec(), spaceship.GetRec()))
         {
             laser.active = false;
-            lives-- ;
-            if(lives == 0)
+            lives--;
+            if (lives == 0)
             {
-                GameOver() ;
+                GameOver();
             }
         }
         for (Obstacle &obstacle : obstacles)
@@ -288,25 +291,25 @@ void Game::CheckForCollision()
             }
         }
     }
-    for(Alien & alien : aliens)
+    for (Alien &alien : aliens)
     {
-        for(Obstacle & obstacle : obstacles)
+        for (Obstacle &obstacle : obstacles)
         {
-            auto it  = obstacle.blocks.begin() ;
-            while(it != obstacle.blocks.end())
+            auto it = obstacle.blocks.begin();
+            while (it != obstacle.blocks.end())
             {
-            if(CheckCollisionRecs(it -> GetRec() , alien.GetRec()))
-            {
-                it = obstacle.blocks.erase(it) ;
-            }
-            else it++ ;
-
+                if (CheckCollisionRecs(it->GetRec(), alien.GetRec()))
+                {
+                    it = obstacle.blocks.erase(it);
+                }
+                else
+                    it++;
             }
         }
-        if(CheckCollisionRecs(alien.GetRec() , spaceship.GetRec()))
+        if (CheckCollisionRecs(alien.GetRec(), spaceship.GetRec()))
         {
             // std::cout<<"hittttt\n" ;
-            GameOver() ;
+            GameOver();
         }
     }
 }

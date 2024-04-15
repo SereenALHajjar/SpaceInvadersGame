@@ -14,11 +14,12 @@ public:
     void Draw();
     void Update();
     void HandleInput();
-    bool run ;      
-    int lives ;
-    int score ;
-    int high_score ; 
-    Music music ; 
+    bool run;
+    int lives;
+    int score;
+    int high_score;
+    Music music;
+
 private:
     Spaceship spaceship;
     void DeleteInactiveLaser();
@@ -29,19 +30,19 @@ private:
     void MoveAliens();
     void MoveDownAliens(int distance);
     void AlienShootLaser();
-    void GameOver() ;
-    void Reset() ;
-    void CheckForHighScore() ;
-    void InitGame() ;
-    void SaveHighScoreToFile(int high_score) ;
-    int LoadHighScoreFromFile() ;
+    void GameOver();
+    void Reset();
+    void CheckForHighScore();
+    void InitGame();
+    void SaveHighScoreToFile(int high_score);
+    int LoadHighScoreFromFile();
     int aliens_direction;
     std::vector<Laser> aliens_laser;
     constexpr static float alien_laser_shoot_interval = 0.35;
     float time_last_alien_fired;
-    MysteryShip mystery_ship ;
-    float mystery_ship_spawn_interval ;
-    float time_last_spawn ; 
-    void CheckForCollision() ; 
-    Sound explosion_sound ;
+    MysteryShip mystery_ship;
+    float mystery_ship_spawn_interval;
+    float time_last_spawn;
+    void CheckForCollision();
+    Sound explosion_sound;
 };

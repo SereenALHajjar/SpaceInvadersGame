@@ -2,16 +2,16 @@
 
 Block::Block(Vector2 position)
 {
-    this -> position = position ;
+    this->position = position;
 }
 
 void Block::Draw()
 {
-    DrawRectangle(position.x , position.y , 3 , 3 , {243 , 216 , 63 , 255}) ;
+    DrawRectangle(position.x, position.y, 3, 3, {243, 216, 63, 255});
 }
 
 Rectangle Block::GetRec()
 {
 
-    return {position.x , position.y , 3 , 3} ;
+    return {position.x, position.y, 3, 3};
 }
